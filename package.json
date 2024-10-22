@@ -1,0 +1,24 @@
+{
+  "name": "island-ssg",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc -w"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.7.8",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "cac": "^6.7.14",
+    "vite": "^5.4.9"
+  },
+  "bin": {
+    "island": "bin/island.js"
+  }
+}
