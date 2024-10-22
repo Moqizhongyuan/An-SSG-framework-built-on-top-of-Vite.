@@ -16,6 +16,8 @@
   },
   "dependencies": {
     "cac": "^6.7.14",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "vite": "^5.4.9"
   },
   "bin": {
