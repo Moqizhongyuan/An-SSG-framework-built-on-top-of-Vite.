@@ -10,6 +10,11 @@
     "build": "tsup",
     "lint": "eslint -c ./eslint.config.mjs --fix"
   },
+  "lint-staged": {
+    "**/*.{js,jsx,tsx,ts}": [
+      "npm run lint"
+    ]
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -29,6 +34,7 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "globals": "^15.11.0",
     "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
     "ora": "^8.1.0",
     "prettier": "^3.3.3",
     "rollup": "^4.24.0",
