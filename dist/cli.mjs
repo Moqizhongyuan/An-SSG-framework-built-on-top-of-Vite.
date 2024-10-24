@@ -1,48 +1,4 @@
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __commonJS = (cb, mod) => function __require() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-};
-
-// package.json
-var require_package = __commonJS({
-  "package.json"(exports, module) {
-    module.exports = {
-      name: "island-ssg",
-      version: "1.0.0",
-      description: "",
-      main: "index.js",
-      scripts: {
-        test: 'echo "Error: no test specified" && exit 1',
-        start: "tsup --watch",
-        build: "tsup"
-      },
-      keywords: [],
-      author: "",
-      license: "ISC",
-      devDependencies: {
-        "@types/fs-extra": "^11.0.4",
-        "@types/node": "^22.7.8",
-        ora: "^8.1.0",
-        rollup: "^4.24.0",
-        tsup: "^8.3.0",
-        typescript: "^5.6.3"
-      },
-      dependencies: {
-        "@vitejs/plugin-react": "^4.3.3",
-        cac: "^6.7.14",
-        "fs-extra": "^11.2.0",
-        react: "^18.3.1",
-        "react-dom": "^18.3.1",
-        vite: "^5.4.9"
-      },
-      bin: {
-        island: "bin/island.js"
-      }
-    };
-  }
-});
-
-// node_modules/.pnpm/tsup@8.3.0_postcss@8.4.47_typescript@5.6.3/node_modules/tsup/assets/esm_shims.js
+// node_modules/.pnpm/tsup@8.3.0_jiti@1.21.6_postcss@8.4.47_tsx@4.19.1_typescript@5.6.3_yaml@2.5.1/node_modules/tsup/assets/esm_shims.js
 import { fileURLToPath } from "url";
 import path from "path";
 var getFilename = () => fileURLToPath(import.meta.url);
@@ -115,7 +71,12 @@ import pluginReact from "@vitejs/plugin-react";
 async function createDevServer(root = process.cwd()) {
   return createViteDevServer({
     root,
-    plugins: [pluginIndexHtml(), pluginReact()]
+    plugins: [pluginIndexHtml(), pluginReact()],
+    server: {
+      fs: {
+        allow: [PACKAGE_ROOT]
+      }
+    }
   });
 }
 
@@ -159,7 +120,7 @@ async function renderPage(render, root, clientBundle) {
   const clientChunk = clientBundle.output.find(
     (chunk) => chunk.type === "chunk" && chunk.isEntry
   );
-  console.log(`Rendering page in server side...`);
+  console.log("Rendering page in server side...");
   const appHtml = render();
   const html = `
 <!DOCTYPE html>
@@ -189,7 +150,7 @@ async function build(root) {
 
 // src/node/cli.ts
 import { resolve } from "path";
-var version = require_package().version;
+var version = "0.0.1";
 var cli = cac("island").version(version).help();
 cli.command("dev [root]", "start dev server").action(async (root) => {
   const server = await createDevServer(root);
