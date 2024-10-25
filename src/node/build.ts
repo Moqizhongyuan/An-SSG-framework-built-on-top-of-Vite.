@@ -1,16 +1,23 @@
+import pluginReact from '@vitejs/plugin-react';
 import { InlineConfig, build as viteBuild } from 'vite';
 import { CLIENT_ENTRY_PATH, SERVER_ENTRY_PATH } from './constants';
 import path from 'path';
 import fs from 'fs-extra';
 import { RollupOutput } from 'rollup';
 import { join } from 'path';
+import { SiteConfig } from 'shared/types';
+import { pluginConfig } from './plugin-island/config';
 
-export async function bundle(root: string) {
+export async function bundle(root: string, config: SiteConfig) {
   try {
     const resolveViteConfig = (isServer: boolean): InlineConfig => {
       return {
         mode: 'production',
         root,
+        plugins: [pluginReact(), pluginConfig(config)],
+        ssr: {
+          noExternal: ['react-dom-router']
+        },
         build: {
           ssr: isServer,
           outDir: isServer ? '.temp' : 'build',
@@ -31,10 +38,12 @@ export async function bundle(root: string) {
       return viteBuild(resolveViteConfig(true));
     };
     console.log('Build client + server bundles...');
-    const [clientBundle, serverBundle] = await Promise.all([clientBuild(), serverBuild()]);
+    const [clientBundle, serverBundle] = await Promise.all([
+      clientBuild(),
+      serverBuild()
+    ]);
     return [clientBundle, serverBundle] as [RollupOutput, RollupOutput];
-  }
-  catch (e) {
+  } catch (e) {
     console.log(e);
   }
 }
@@ -68,9 +77,9 @@ export async function renderPage(
   await fs.remove(join(root, '.temp'));
 }
 
-export async function build(root: string) {
+export async function build(root: string, config: SiteConfig) {
   // 1.bundle - client端 + server端
-  const [clientBundle] = await bundle(root);
+  const [clientBundle] = await bundle(root, config);
   // 2.引入server-entry模块
   const serverEntryPath = path.join(root, '.temp', 'ssr-entry.js');
   // 3.服务端渲染，产出html
@@ -78,5 +87,3 @@ export async function build(root: string) {
   console.log(render);
   await renderPage(render, root, clientBundle);
 }
-
-
