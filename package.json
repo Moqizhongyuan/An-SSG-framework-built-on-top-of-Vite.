@@ -6,7 +6,7 @@
   "scripts": {
     "prepare": "husky",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsup --watch",
+    "dev": "tsup --watch",
     "build": "tsup",
     "lint": "eslint -c ./eslint.config.mjs --fix",
     "test:unit": "vitest --ui",
