@@ -1,23 +1,31 @@
 import {
   CLIENT_ENTRY_PATH,
-  SERVER_ENTRY_PATH
-} from "./chunk-TAD6XJ3U.mjs";
-import "./chunk-B2IBIQAV.mjs";
+  SERVER_ENTRY_PATH,
+  pluginConfig
+} from "./chunk-MPXCV5I2.mjs";
+import {
+  resolveConfig
+} from "./chunk-YF5UCQ4B.mjs";
 
 // src/node/cli.ts
 import { cac } from "cac";
 
 // src/node/build.ts
+import pluginReact from "@vitejs/plugin-react";
 import { build as viteBuild } from "vite";
 import path from "path";
 import fs from "fs-extra";
 import { join } from "path";
-async function bundle(root) {
+async function bundle(root, config) {
   try {
     const resolveViteConfig = (isServer) => {
       return {
         mode: "production",
         root,
+        plugins: [pluginReact(), pluginConfig(config)],
+        ssr: {
+          noExternal: ["react-dom-router"]
+        },
         build: {
           ssr: isServer,
           outDir: isServer ? ".temp" : "build",
@@ -37,7 +45,10 @@ async function bundle(root) {
       return viteBuild(resolveViteConfig(true));
     };
     console.log("Build client + server bundles...");
-    const [clientBundle, serverBundle] = await Promise.all([clientBuild(), serverBuild()]);
+    const [clientBundle, serverBundle] = await Promise.all([
+      clientBuild(),
+      serverBuild()
+    ]);
     return [clientBundle, serverBundle];
   } catch (e) {
     console.log(e);
@@ -67,11 +78,10 @@ async function renderPage(render, root, clientBundle) {
   await fs.writeFile(join(root, "build/index.html"), html);
   await fs.remove(join(root, ".temp"));
 }
-async function build(root) {
-  const [clientBundle] = await bundle(root);
+async function build(root, config) {
+  const [clientBundle] = await bundle(root, config);
   const serverEntryPath = path.join(root, ".temp", "ssr-entry.js");
   const { render } = await import(serverEntryPath);
-  console.log(render);
   await renderPage(render, root, clientBundle);
 }
 
@@ -94,7 +104,8 @@ cli.command("dev [root]", "start dev server").action(async (root) => {
 cli.command("build [root]", "build for production").action(async (root) => {
   try {
     root = resolve(root);
-    await build(root);
+    const config = await resolveConfig(root, "build", "production");
+    await build(root, config);
   } catch (e) {
     console.log(e);
   }

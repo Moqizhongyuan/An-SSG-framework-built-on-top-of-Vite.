@@ -84,6 +84,5 @@ export async function build(root: string, config: SiteConfig) {
   const serverEntryPath = path.join(root, '.temp', 'ssr-entry.js');
   // 3.服务端渲染，产出html
   const { render } = await import(serverEntryPath);
-  console.log(render);
   await renderPage(render, root, clientBundle);
 }

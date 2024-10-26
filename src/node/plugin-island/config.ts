@@ -12,6 +12,7 @@ export function pluginConfig(
   // let server: ViteDevServer | null = null;
   return {
     name: 'island:config',
+
     resolveId(id) {
       if (id === SITE_DATA_ID) {
         return '\0' + SITE_DATA_ID;
