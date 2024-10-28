@@ -2,7 +2,7 @@
 
 
 
-var _chunkBSJ2HE34js = require('./chunk-BSJ2HE34.js');
+var _chunkMYOREFINjs = require('./chunk-MYOREFIN.js');
 
 
 var _chunkAHCZKDOMjs = require('./chunk-AHCZKDOM.js');
@@ -11,18 +11,17 @@ var _chunkAHCZKDOMjs = require('./chunk-AHCZKDOM.js');
 var _cac = require('cac');
 
 // src/node/build.ts
-var _pluginreact = require('@vitejs/plugin-react'); var _pluginreact2 = _interopRequireDefault(_pluginreact);
 var _vite = require('vite');
 var _path = require('path'); var _path2 = _interopRequireDefault(_path);
 var _fsextra = require('fs-extra'); var _fsextra2 = _interopRequireDefault(_fsextra);
 
 async function bundle(root, config) {
   try {
-    const resolveViteConfig = (isServer) => {
+    const resolveViteConfig = async (isServer) => {
       return {
         mode: "production",
         root,
-        plugins: [_pluginreact2.default.call(void 0, ), _chunkBSJ2HE34js.pluginConfig.call(void 0, config)],
+        plugins: await _chunkMYOREFINjs.createVitePlugins.call(void 0, config),
         ssr: {
           noExternal: ["react-dom-router"]
         },
@@ -30,7 +29,7 @@ async function bundle(root, config) {
           ssr: isServer,
           outDir: isServer ? ".temp" : "build",
           rollupOptions: {
-            input: isServer ? _chunkBSJ2HE34js.SERVER_ENTRY_PATH : _chunkBSJ2HE34js.CLIENT_ENTRY_PATH,
+            input: isServer ? _chunkMYOREFINjs.SERVER_ENTRY_PATH : _chunkMYOREFINjs.CLIENT_ENTRY_PATH,
             output: {
               format: isServer ? "cjs" : "esm"
             }
@@ -39,10 +38,10 @@ async function bundle(root, config) {
       };
     };
     const clientBuild = async () => {
-      return _vite.build.call(void 0, resolveViteConfig(false));
+      return _vite.build.call(void 0, await resolveViteConfig(false));
     };
     const serverBuild = async () => {
-      return _vite.build.call(void 0, resolveViteConfig(true));
+      return _vite.build.call(void 0, await resolveViteConfig(true));
     };
     console.log("Build client + server bundles...");
     const [clientBundle, serverBundle] = await Promise.all([

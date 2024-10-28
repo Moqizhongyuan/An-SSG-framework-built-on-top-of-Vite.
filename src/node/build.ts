@@ -1,4 +1,3 @@
-import pluginReact from '@vitejs/plugin-react';
 import { InlineConfig, build as viteBuild } from 'vite';
 import { CLIENT_ENTRY_PATH, SERVER_ENTRY_PATH } from './constants';
 import path from 'path';
@@ -6,15 +5,17 @@ import fs from 'fs-extra';
 import { RollupOutput } from 'rollup';
 import { join } from 'path';
 import { SiteConfig } from 'shared/types';
-import { pluginConfig } from './plugin-island/config';
+import { createVitePlugins } from './vitePlugins';
 
 export async function bundle(root: string, config: SiteConfig) {
   try {
-    const resolveViteConfig = (isServer: boolean): InlineConfig => {
+    const resolveViteConfig = async (
+      isServer: boolean
+    ): Promise<InlineConfig> => {
       return {
         mode: 'production',
         root,
-        plugins: [pluginReact(), pluginConfig(config)],
+        plugins: await createVitePlugins(config),
         ssr: {
           noExternal: ['react-dom-router']
         },
@@ -31,11 +32,11 @@ export async function bundle(root: string, config: SiteConfig) {
       };
     };
     const clientBuild = async () => {
-      return viteBuild(resolveViteConfig(false));
+      return viteBuild(await resolveViteConfig(false));
     };
 
     const serverBuild = async () => {
-      return viteBuild(resolveViteConfig(true));
+      return viteBuild(await resolveViteConfig(true));
     };
     console.log('Build client + server bundles...');
     const [clientBundle, serverBundle] = await Promise.all([

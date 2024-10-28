@@ -1,8 +1,8 @@
 import {
   CLIENT_ENTRY_PATH,
   SERVER_ENTRY_PATH,
-  pluginConfig
-} from "./chunk-MPXCV5I2.mjs";
+  createVitePlugins
+} from "./chunk-IHOTJENR.mjs";
 import {
   resolveConfig
 } from "./chunk-YF5UCQ4B.mjs";
@@ -11,18 +11,17 @@ import {
 import { cac } from "cac";
 
 // src/node/build.ts
-import pluginReact from "@vitejs/plugin-react";
 import { build as viteBuild } from "vite";
 import path from "path";
 import fs from "fs-extra";
 import { join } from "path";
 async function bundle(root, config) {
   try {
-    const resolveViteConfig = (isServer) => {
+    const resolveViteConfig = async (isServer) => {
       return {
         mode: "production",
         root,
-        plugins: [pluginReact(), pluginConfig(config)],
+        plugins: await createVitePlugins(config),
         ssr: {
           noExternal: ["react-dom-router"]
         },
@@ -39,10 +38,10 @@ async function bundle(root, config) {
       };
     };
     const clientBuild = async () => {
-      return viteBuild(resolveViteConfig(false));
+      return viteBuild(await resolveViteConfig(false));
     };
     const serverBuild = async () => {
-      return viteBuild(resolveViteConfig(true));
+      return viteBuild(await resolveViteConfig(true));
     };
     console.log("Build client + server bundles...");
     const [clientBundle, serverBundle] = await Promise.all([
