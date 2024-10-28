@@ -8,13 +8,15 @@ import remarkPluginFrontmatter from 'remark-frontmatter';
 import { rehypePluginPreWrapper } from './rehypePlugins/preWrapper';
 import { rehypePluginShiki } from './rehypePlugins/shiki';
 import { createHighlighter } from 'shiki';
+import { remarkPluginToc } from './remarkPlugins/toc';
 
 export async function pluginMdxRollup(): Promise<Plugin> {
   return pluginMdx({
     remarkPlugins: [
       remarkPluginGFM,
       remarkPluginFrontmatter,
-      [remarkPluginMDXFrontMatter, { name: 'frontmatter' }]
+      [remarkPluginMDXFrontMatter, { name: 'frontmatter' }],
+      remarkPluginToc
     ],
     rehypePlugins: [
       rehypePluginSlug,
@@ -35,7 +37,7 @@ export async function pluginMdxRollup(): Promise<Plugin> {
         rehypePluginShiki,
         {
           highlighter: await createHighlighter({
-            langs: ['js'],
+            langs: ['js', 'ts'],
             themes: ['nord']
           })
         }
