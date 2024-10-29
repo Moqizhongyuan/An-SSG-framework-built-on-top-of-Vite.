@@ -2,7 +2,7 @@
 
 
 
-var _chunkZVCNYCDHjs = require('./chunk-ZVCNYCDH.js');
+var _chunkSYG56WYCjs = require('./chunk-SYG56WYC.js');
 
 
 var _chunkAHCZKDOMjs = require('./chunk-AHCZKDOM.js');
@@ -21,7 +21,7 @@ async function bundle(root, config) {
       return {
         mode: "production",
         root,
-        plugins: await _chunkZVCNYCDHjs.createVitePlugins.call(void 0, config),
+        plugins: await _chunkSYG56WYCjs.createVitePlugins.call(void 0, config),
         ssr: {
           noExternal: ["react-dom-router"]
         },
@@ -29,7 +29,7 @@ async function bundle(root, config) {
           ssr: isServer,
           outDir: isServer ? ".temp" : "build",
           rollupOptions: {
-            input: isServer ? _chunkZVCNYCDHjs.SERVER_ENTRY_PATH : _chunkZVCNYCDHjs.CLIENT_ENTRY_PATH,
+            input: isServer ? _chunkSYG56WYCjs.SERVER_ENTRY_PATH : _chunkSYG56WYCjs.CLIENT_ENTRY_PATH,
             output: {
               format: isServer ? "cjs" : "esm"
             }
