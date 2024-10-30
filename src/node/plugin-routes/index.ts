@@ -1,4 +1,3 @@
-import { React } from 'react';
 import { Plugin } from 'vite';
 import { RouteService } from './RouteService';
 // 本质: 把文件目录结构 -> 路由数据
@@ -11,6 +10,7 @@ export interface Route {
 
 interface PluginOptions {
   root: string;
+  isSSR: boolean;
 }
 
 export const CONVENTIONAL_ROUTE_ID = 'island:routes';
@@ -32,7 +32,7 @@ export function pluginRoutes(options: PluginOptions): Plugin {
 
     load(id: string) {
       if (id === '\0' + CONVENTIONAL_ROUTE_ID) {
-        return routeService.generateRoutesCode();
+        return routeService.generateRoutesCode(options.isSSR || false);
       }
     }
   };

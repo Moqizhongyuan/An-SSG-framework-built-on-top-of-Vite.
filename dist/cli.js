@@ -2,7 +2,7 @@
 
 
 
-var _chunkSYG56WYCjs = require('./chunk-SYG56WYC.js');
+var _chunkDJD7HCAJjs = require('./chunk-DJD7HCAJ.js');
 
 
 var _chunkAHCZKDOMjs = require('./chunk-AHCZKDOM.js');
@@ -14,52 +14,48 @@ var _cac = require('cac');
 var _vite = require('vite');
 var _path = require('path'); var _path2 = _interopRequireDefault(_path);
 var _fsextra = require('fs-extra'); var _fsextra2 = _interopRequireDefault(_fsextra);
-
 async function bundle(root, config) {
-  try {
-    const resolveViteConfig = async (isServer) => {
-      return {
-        mode: "production",
-        root,
-        plugins: await _chunkSYG56WYCjs.createVitePlugins.call(void 0, config),
-        ssr: {
-          noExternal: ["react-dom-router"]
-        },
-        build: {
-          ssr: isServer,
-          outDir: isServer ? ".temp" : "build",
-          rollupOptions: {
-            input: isServer ? _chunkSYG56WYCjs.SERVER_ENTRY_PATH : _chunkSYG56WYCjs.CLIENT_ENTRY_PATH,
-            output: {
-              format: isServer ? "cjs" : "esm"
-            }
-          }
+  const resolveViteConfig = async (isServer) => ({
+    mode: "production",
+    root,
+    plugins: await _chunkDJD7HCAJjs.createVitePlugins.call(void 0, config, void 0, isServer),
+    ssr: {
+      noExternal: ["react-router-dom"]
+    },
+    build: {
+      minify: false,
+      ssr: isServer,
+      outDir: isServer ? _path2.default.join(root, ".temp") : _path2.default.join(root, "build"),
+      rollupOptions: {
+        input: isServer ? _chunkDJD7HCAJjs.SERVER_ENTRY_PATH : _chunkDJD7HCAJjs.CLIENT_ENTRY_PATH,
+        output: {
+          format: isServer ? "cjs" : "esm"
         }
-      };
-    };
-    const clientBuild = async () => {
-      return _vite.build.call(void 0, await resolveViteConfig(false));
-    };
-    const serverBuild = async () => {
-      return _vite.build.call(void 0, await resolveViteConfig(true));
-    };
-    console.log("Build client + server bundles...");
+      }
+    }
+  });
+  try {
     const [clientBundle, serverBundle] = await Promise.all([
-      clientBuild(),
-      serverBuild()
+      // client build
+      _vite.build.call(void 0, await resolveViteConfig(false)),
+      // server build
+      _vite.build.call(void 0, await resolveViteConfig(true))
     ]);
     return [clientBundle, serverBundle];
   } catch (e) {
     console.log(e);
   }
 }
-async function renderPage(render, root, clientBundle) {
+async function renderPages(render, routes, root, clientBundle) {
+  console.log("Rendering page in server side...");
   const clientChunk = clientBundle.output.find(
     (chunk) => chunk.type === "chunk" && chunk.isEntry
   );
-  console.log("Rendering page in server side...");
-  const appHtml = render();
-  const html = `
+  return Promise.all(
+    routes.map(async (route) => {
+      const routePath = route.path;
+      const appHtml = render(routePath);
+      const html = `
 <!DOCTYPE html>
 <html>
   <head>
@@ -73,15 +69,21 @@ async function renderPage(render, root, clientBundle) {
     <script type="module" src="/${_optionalChain([clientChunk, 'optionalAccess', _ => _.fileName])}"></script>
   </body>
 </html>`.trim();
-  await _fsextra2.default.ensureDir(_path.join.call(void 0, root, "build"));
-  await _fsextra2.default.writeFile(_path.join.call(void 0, root, "build/index.html"), html);
-  await _fsextra2.default.remove(_path.join.call(void 0, root, ".temp"));
+      const fileName = routePath.endsWith("/") ? `${routePath}index.html` : `${routePath}.html`;
+      await _fsextra2.default.ensureDir(_path.join.call(void 0, root, "build", _path.dirname.call(void 0, fileName)));
+      await _fsextra2.default.writeFile(_path.join.call(void 0, root, "build", fileName), html);
+    })
+  );
 }
-async function build(root, config) {
+async function build(root = process.cwd(), config) {
   const [clientBundle] = await bundle(root, config);
-  const serverEntryPath = _path2.default.join(root, ".temp", "ssr-entry.js");
-  const { render } = await Promise.resolve().then(() => _interopRequireWildcard(require(serverEntryPath)));
-  await renderPage(render, root, clientBundle);
+  const serverEntryPath = _path.join.call(void 0, root, ".temp", "ssr-entry.js");
+  const { render, routes } = await Promise.resolve().then(() => _interopRequireWildcard(require(serverEntryPath)));
+  try {
+    await renderPages(render, routes, root, clientBundle);
+  } catch (e) {
+    console.log("Render page error.\n", e);
+  }
 }
 
 // src/node/cli.ts

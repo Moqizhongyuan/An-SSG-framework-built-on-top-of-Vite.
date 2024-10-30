@@ -29,7 +29,7 @@ export default [
       quotes: ['error', 'single'],
       semi: ['error', 'always'],
       'react/react-in-jsx-scope': 'off',
-      'A `require()` style import is forbidden': 'off'
+      'react/no-unknown-property': 'off'
     }
   },
   {

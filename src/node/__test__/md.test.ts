@@ -63,7 +63,7 @@ describe('Markdown compile cases', async () => {
     expect(result.value.toString().replace(mdContent, ''))
       .toMatchInlineSnapshot(`
       "
-      export const Toc = [
+      export const toc = [
         {
           "id": "h2-code",
           "text": "h2 code",
