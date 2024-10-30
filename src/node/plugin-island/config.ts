@@ -45,6 +45,11 @@ export function pluginConfig(
         resolve: {
           alias: {
             '@runtime': join(PACKAGE_ROOT, 'src', 'runtime', 'index.ts')
+          },
+          css: {
+            modules: {
+              localsConvention: 'camelCaseOnly'
+            }
           }
         }
       };
