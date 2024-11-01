@@ -1,5 +1,6 @@
 import { Header } from 'shared/types';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
+import { bindingAsideScroll, scrollToTarget } from '../../logic/asideScroll';
 // import { bindingAsideScroll, scrollToTarget } from '../../logic/asideScroll';
 // import { useHeaders } from '../../logic/useHeaders';
 
@@ -14,6 +15,13 @@ export function Aside(props: AsideProps) {
   // 当前标题会进行高亮处理，我们会在这个标题前面加一个 marker 元素
   const markerRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    const unbinding = bindingAsideScroll();
+    return () => {
+      unbinding();
+    };
+  }, []);
+
   const renderHeader = (header: Header) => {
     return (
       <li key={header.id}>
@@ -23,6 +31,13 @@ export function Aside(props: AsideProps) {
           transition="color duration-300"
           style={{
             paddingLeft: (header.depth - 2) * 12
+          }}
+          onClick={(e) => {
+            e.preventDefault();
+            const target = document.getElementById(header.id);
+            if (target) {
+              scrollToTarget(target, true);
+            }
           }}
         >
           {header.text}
@@ -42,7 +57,7 @@ export function Aside(props: AsideProps) {
         {hasOutline && (
           <div
             id="aside-container"
-            className="relative divider-left pl-4 text-13px font-medium"
+            className="fixed divider-left pl-4 text-13px font-medium"
           >
             <div
               ref={markerRef}

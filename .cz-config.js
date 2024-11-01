@@ -17,7 +17,8 @@ module.exports = {
     { name: 'javascript' },
     { name: 'typescript' },
     { name: 'Vue' },
-    { name: 'node' }
+    { name: 'node' },
+    { name: 'React ' }
   ],
   // it needs to match the value for field type. Eg.: 'fix'
   /*  scopeOverrides: {
