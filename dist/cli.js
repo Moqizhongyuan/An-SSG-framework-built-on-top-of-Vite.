@@ -2,7 +2,7 @@
 
 
 
-var _chunkR6JK5J3Ojs = require('./chunk-R6JK5J3O.js');
+var _chunkUAPRQCBHjs = require('./chunk-UAPRQCBH.js');
 
 
 var _chunkAHCZKDOMjs = require('./chunk-AHCZKDOM.js');
@@ -18,16 +18,16 @@ async function bundle(root, config) {
   const resolveViteConfig = async (isServer) => ({
     mode: "production",
     root,
-    plugins: await _chunkR6JK5J3Ojs.createVitePlugins.call(void 0, config, void 0, isServer),
+    plugins: await _chunkUAPRQCBHjs.createVitePlugins.call(void 0, config, void 0, isServer),
     ssr: {
-      noExternal: ["react-router-dom"]
+      noExternal: ["react-router-dom", "lodash-es"]
     },
     build: {
       minify: false,
       ssr: isServer,
       outDir: isServer ? _path2.default.join(root, ".temp") : _path2.default.join(root, "build"),
       rollupOptions: {
-        input: isServer ? _chunkR6JK5J3Ojs.SERVER_ENTRY_PATH : _chunkR6JK5J3Ojs.CLIENT_ENTRY_PATH,
+        input: isServer ? _chunkUAPRQCBHjs.SERVER_ENTRY_PATH : _chunkUAPRQCBHjs.CLIENT_ENTRY_PATH,
         output: {
           format: isServer ? "cjs" : "esm"
         }
@@ -54,7 +54,7 @@ async function renderPages(render, routes, root, clientBundle) {
   return Promise.all(
     routes.map(async (route) => {
       const routePath = route.path;
-      const appHtml = render(routePath);
+      const appHtml = await render(routePath);
       const html = `
 <!DOCTYPE html>
 <html>

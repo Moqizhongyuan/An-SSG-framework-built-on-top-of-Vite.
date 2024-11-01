@@ -2,7 +2,7 @@ import {
   CLIENT_ENTRY_PATH,
   SERVER_ENTRY_PATH,
   createVitePlugins
-} from "./chunk-PIFFLDYV.mjs";
+} from "./chunk-HG74P5XN.mjs";
 import {
   resolveConfig
 } from "./chunk-YF5UCQ4B.mjs";
@@ -20,7 +20,7 @@ async function bundle(root, config) {
     root,
     plugins: await createVitePlugins(config, void 0, isServer),
     ssr: {
-      noExternal: ["react-router-dom"]
+      noExternal: ["react-router-dom", "lodash-es"]
     },
     build: {
       minify: false,
@@ -54,7 +54,7 @@ async function renderPages(render, routes, root, clientBundle) {
   return Promise.all(
     routes.map(async (route) => {
       const routePath = route.path;
-      const appHtml = render(routePath);
+      const appHtml = await render(routePath);
       const html = `
 <!DOCTYPE html>
 <html>

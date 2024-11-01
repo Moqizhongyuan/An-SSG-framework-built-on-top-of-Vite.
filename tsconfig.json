@@ -12,6 +12,7 @@
       "@runtime": ["./runtime/index.ts"],
       "shared/*": ["shared/*"]
     },
+    "types": ["vite/client"]
   },
   "include": ["e2e/**/*.ts", "src/**/*"],
 }
