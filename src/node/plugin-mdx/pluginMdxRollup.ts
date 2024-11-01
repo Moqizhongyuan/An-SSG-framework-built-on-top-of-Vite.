@@ -37,7 +37,7 @@ export async function pluginMdxRollup(): Promise<Plugin> {
         rehypePluginShiki,
         {
           highlighter: await createHighlighter({
-            langs: ['js', 'ts'],
+            langs: ['js', 'ts', 'json'],
             themes: ['nord']
           })
         }

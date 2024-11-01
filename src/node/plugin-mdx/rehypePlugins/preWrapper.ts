@@ -1,6 +1,10 @@
 import type { Plugin } from 'unified';
 import { visit } from 'unist-util-visit';
-import type { Element, Root } from 'hast';
+import type { Element, ElementData, Root } from 'hast';
+
+interface nodeData extends ElementData {
+  isVisited: boolean;
+}
 
 export const rehypePluginPreWrapper: Plugin<[], Root> = () => {
   return (tree) => {
@@ -11,9 +15,8 @@ export const rehypePluginPreWrapper: Plugin<[], Root> = () => {
         node.tagName === 'pre' &&
         node.children[0]?.type === 'element' &&
         node.children[0].tagName === 'code' &&
-        !node.data?.isVisited
+        !(node.data as nodeData)?.isVisited
       ) {
-        console.log(node.tagName);
         const codeNode = node.children[0];
         const codeClassName = codeNode.properties?.className?.toString() || '';
         // language-xxx
@@ -25,7 +28,8 @@ export const rehypePluginPreWrapper: Plugin<[], Root> = () => {
           children: node.children,
           data: {
             isVisited: true
-          }
+          } as nodeData,
+          properties: undefined
         };
 
         // 修改原来的 pre 标签 -> div 标签

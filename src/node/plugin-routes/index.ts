@@ -1,13 +1,6 @@
 import { Plugin } from 'vite';
 import { RouteService } from './RouteService';
-import { ComponentType } from 'react';
-import { FrontMatter } from 'shared/types';
-
-export interface PageModule {
-  default: ComponentType;
-  frontmatter?: FrontMatter;
-  [key: string]: unknown;
-}
+import { PageModule } from 'shared/types';
 
 export interface Route {
   path: string;

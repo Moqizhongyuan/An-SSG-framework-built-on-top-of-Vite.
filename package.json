@@ -11,7 +11,8 @@
     "lint": "eslint -c ./eslint.config.mjs --fix",
     "test:unit": "vitest --ui",
     "prepare:e2e": "tsx scripts/prepare-e2e.ts",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "commit": "git-cz"
   },
   "lint-staged": {
     "**/*.{js,jsx,tsx,ts}": [
@@ -37,7 +38,11 @@
     "@typescript-eslint/eslint-plugin": "^8.11.0",
     "@typescript-eslint/parser": "^8.11.0",
     "@vitest/ui": "^2.1.3",
+    "commitizen": "^4.3.1",
     "commitlint": "^19.5.0",
+    "commitlint-config-cz": "^0.13.3",
+    "cz-conventional-changelog": "^3.3.0",
+    "cz-customizable": "^7.2.1",
     "eslint": "^9.13.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
@@ -89,5 +94,18 @@
   },
   "bin": {
     "island": "bin/island.js"
+  },
+  "pnpm": {
+    "overrides": {
+      "remark-mdx": "3.0.0",
+      "unified": "11.0.4",
+      "remark-parse": "11.0.0",
+      "mdast-util-frontmatter": "2.0.1"
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-customizable"
+    }
   }
 }
