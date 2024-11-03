@@ -29,7 +29,7 @@ export function DocLayout() {
           <DocFooter />
         </div>
         <div>
-          <Aside headers={toc} />
+          <Aside headers={toc} __island />
         </div>
       </div>
     </div>
