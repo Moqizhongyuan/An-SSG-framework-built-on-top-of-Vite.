@@ -1,8 +1,10 @@
 {
-  "name": "island-ssg",
-  "version": "1.1.0",
-  "description": "",
-  "main": "index.js",
+  "name": "island-ssg_roxanne",
+  "version": "1.0.0",
+  "description": "Vite SSG framework based on islands arch",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "scripts": {
     "prepare": "husky",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -22,9 +24,20 @@
       "npm run lint"
     ]
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "vite",
+    "ssg"
+  ],
+  "author": "Roxanne",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "bin",
+    "README.md",
+    "src/runtime",
+    "src/theme-default",
+    "src/shared"
+  ],
   "devDependencies": {
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
