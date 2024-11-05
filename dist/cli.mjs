@@ -7,6 +7,9 @@ import {
   createVitePlugins
 } from "./chunk-FP5IHPDT.mjs";
 import {
+  preview
+} from "./chunk-TF4XUG75.mjs";
+import {
   resolveConfig
 } from "./chunk-YF5UCQ4B.mjs";
 
@@ -114,7 +117,12 @@ async function renderPages(render, routes, root, clientBundle) {
     (chunk) => chunk.type === "chunk" && chunk.isEntry
   );
   return Promise.all(
-    routes.map(async (route) => {
+    [
+      ...routes,
+      {
+        path: "/404"
+      }
+    ].map(async (route) => {
       const routePath = route.path;
       const helmetContext = {
         context: {}
@@ -198,6 +206,14 @@ cli.command("build [root]", "build for production").action(async (root) => {
     root = resolve(root);
     const config = await resolveConfig(root, "build", "production");
     await build(root, config);
+  } catch (e) {
+    console.log(e);
+  }
+});
+cli.command("preview [root]", "preview production build").option("--port <port>", "port to use for preview server").action(async (root, { port }) => {
+  try {
+    root = resolve(root);
+    await preview(root, { port });
   } catch (e) {
     console.log(e);
   }

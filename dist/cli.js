@@ -8,6 +8,9 @@
 var _chunkDPXERQM3js = require('./chunk-DPXERQM3.js');
 
 
+var _chunkVUYYGUIWjs = require('./chunk-VUYYGUIW.js');
+
+
 var _chunkAHCZKDOMjs = require('./chunk-AHCZKDOM.js');
 
 // src/node/cli.ts
@@ -114,7 +117,12 @@ async function renderPages(render, routes, root, clientBundle) {
     (chunk) => chunk.type === "chunk" && chunk.isEntry
   );
   return Promise.all(
-    routes.map(async (route) => {
+    [
+      ...routes,
+      {
+        path: "/404"
+      }
+    ].map(async (route) => {
       const routePath = route.path;
       const helmetContext = {
         context: {}
@@ -198,6 +206,14 @@ cli.command("build [root]", "build for production").action(async (root) => {
     root = _path.resolve.call(void 0, root);
     const config = await _chunkAHCZKDOMjs.resolveConfig.call(void 0, root, "build", "production");
     await build(root, config);
+  } catch (e) {
+    console.log(e);
+  }
+});
+cli.command("preview [root]", "preview production build").option("--port <port>", "port to use for preview server").action(async (root, { port }) => {
+  try {
+    root = _path.resolve.call(void 0, root);
+    await _chunkVUYYGUIWjs.preview.call(void 0, root, { port });
   } catch (e) {
     console.log(e);
   }
