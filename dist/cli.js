@@ -5,7 +5,7 @@
 
 
 
-var _chunkDPXERQM3js = require('./chunk-DPXERQM3.js');
+var _chunk625IZVISjs = require('./chunk-625IZVIS.js');
 
 
 var _chunkVUYYGUIWjs = require('./chunk-VUYYGUIW.js');
@@ -25,7 +25,7 @@ async function bundle(root, config) {
   const resolveViteConfig = async (isServer) => ({
     mode: "production",
     root,
-    plugins: await _chunkDPXERQM3js.createVitePlugins.call(void 0, config, void 0, isServer),
+    plugins: await _chunk625IZVISjs.createVitePlugins.call(void 0, config, void 0, isServer),
     ssr: {
       noExternal: ["react-router-dom", "lodash-es"]
     },
@@ -34,11 +34,11 @@ async function bundle(root, config) {
       ssr: isServer,
       outDir: isServer ? _path2.default.join(root, ".temp") : _path2.default.join(root, CLIENT_OUTPUT),
       rollupOptions: {
-        input: isServer ? _chunkDPXERQM3js.SERVER_ENTRY_PATH : _chunkDPXERQM3js.CLIENT_ENTRY_PATH,
+        input: isServer ? _chunk625IZVISjs.SERVER_ENTRY_PATH : _chunk625IZVISjs.CLIENT_ENTRY_PATH,
         output: {
           format: isServer ? "cjs" : "esm"
         },
-        external: _chunkDPXERQM3js.EXTERNALS
+        external: _chunk625IZVISjs.EXTERNALS
       }
     }
   });
@@ -53,7 +53,7 @@ async function bundle(root, config) {
     if (_fsextra2.default.pathExistsSync(publicDir)) {
       await _fsextra2.default.copy(publicDir, _path.join.call(void 0, root, CLIENT_OUTPUT));
     }
-    await _fsextra2.default.copy(_path.join.call(void 0, _chunkDPXERQM3js.PACKAGE_ROOT, "vendors"), _path.join.call(void 0, root, CLIENT_OUTPUT));
+    await _fsextra2.default.copy(_path.join.call(void 0, _chunk625IZVISjs.PACKAGE_ROOT, "vendors"), _path.join.call(void 0, root, CLIENT_OUTPUT));
     return [clientBundle, serverBundle];
   } catch (e) {
     console.log(e);
@@ -79,7 +79,7 @@ window.ISLAND_PROPS = JSON.parse(
       outDir: _path2.default.join(root, ".temp"),
       rollupOptions: {
         input: injectId,
-        external: _chunkDPXERQM3js.EXTERNALS
+        external: _chunk625IZVISjs.EXTERNALS
       }
     },
     plugins: [
@@ -87,8 +87,8 @@ window.ISLAND_PROPS = JSON.parse(
         name: "island:inject",
         enforce: "post",
         resolveId(id) {
-          if (id.includes(_chunkDPXERQM3js.MASK_SPLITTER)) {
-            const [originId, importer] = id.split(_chunkDPXERQM3js.MASK_SPLITTER);
+          if (id.includes(_chunk625IZVISjs.MASK_SPLITTER)) {
+            const [originId, importer] = id.split(_chunk625IZVISjs.MASK_SPLITTER);
             return this.resolve(originId, importer, { skipSelf: true });
           }
           if (id === injectId) {
@@ -154,7 +154,7 @@ async function renderPages(render, routes, root, clientBundle) {
     <script type="importmap">
       {
         "imports": {
-          ${_chunkDPXERQM3js.EXTERNALS.map(
+          ${_chunk625IZVISjs.EXTERNALS.map(
         (name) => `"${name}": "/${normalizeVendorFilename(name)}"`
       ).join(",")}
         }

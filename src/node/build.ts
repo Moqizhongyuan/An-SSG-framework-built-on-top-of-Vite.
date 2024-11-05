@@ -48,7 +48,6 @@ export async function bundle(root: string, config: SiteConfig) {
   });
   // const spinner = ora();
   // spinner.start(`Building client + server bundles...`);
-
   try {
     const [clientBundle, serverBundle] = await Promise.all([
       // client build
