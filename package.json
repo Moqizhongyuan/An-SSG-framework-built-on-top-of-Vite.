@@ -1,6 +1,6 @@
 {
-  "name": "island-ssg_roxanne",
-  "version": "1.0.0",
+  "name": "island-ssg_yzy",
+  "version": "0.0.0",
   "description": "Vite SSG framework based on islands arch",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
